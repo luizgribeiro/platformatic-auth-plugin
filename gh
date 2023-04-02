@@ -1,0 +1,38 @@
+It would be nice to support debugging options out of the box.
+
+Something like `platformatic db start --inspect` would be pretty useful.
+Perhaps allowing to pass options and flags to the node process that is running platformatic is a good way of achieving this and being compatible with other opitions at the same time.
+
+I've tried to change things a bit in `node_modules/.bin/platformatic` to enable the inspector.
+With a shebang like `#!/bin/env -S node --inspect I was able to launch the program, but after attaching a debugger it crashed. The following output was provided:
+
+```
+#FailureMessage Object: 0x7ffe82264fc0
+ 1: 0xbe70f1  [node]
+ 2: 0x1e4af64 V8_Fatal(char const*, ...) [node]
+ 3: 0xf50118 v8::internal::Heap::AddNearHeapLimitCallback(unsigned long (*)(void*, unsigned long, unsigned long), void*) [node]
+ 4: 0x1396116 v8_inspector::V8Debugger::enable() [node]
+ 5: 0x13aeb37 v8_inspector::V8DebuggerAgentImpl::enableImpl() [node]
+ 6: 0x13aed4e v8_inspector::V8DebuggerAgentImpl::enable(v8_crdtp::detail::ValueMaybe<double>, v8_inspector::String16*) [node]
+ 7: 0x16360f8 v8_inspector::protocol::Debugger::DomainDispatcherImpl::enable(v8_crdtp::Dispatchable const&) [node]
+ 8: 0x13f208b v8_crdtp::UberDispatcher::DispatchResult::Run() [node]
+ 9: 0x13bdea0 v8_inspector::V8InspectorSessionImpl::dispatchProtocolMessage(v8_inspector::StringView) [node]
+10: 0xc8b5c5  [node]
+11: 0xcac511  [node]
+12: 0xcaaa0e  [node]
+13: 0xcaad5e  [node]
+14: 0xcab17a  [node]
+15: 0xb01308 node::Environment::RunAndClearInterrupts() [node]
+16: 0xb01439 node::Environment::RunAndClearNativeImmediates(bool) [node]
+17: 0xb01b46 node::Environment::CheckImmediate(uv_check_s*) [node]
+18: 0x16732a9  [node]
+19: 0x166b9e0 uv_run [node]
+20: 0xabda2d node::SpinEventLoop(node::Environment*) [node]
+21: 0xbc1874 node::NodeMainInstance::Run() [node]
+22: 0xb36434 node::LoadSnapshotDataAndRun(node::SnapshotData const**, node::InitializationResult const*) [node]
+23: 0xb3a02f node::Start(int, char**) [node]
+24: 0x7f30fb172790  [/usr/lib/libc.so.6]
+25: 0x7f30fb17284a __libc_start_main [/usr/lib/libc.so.6]
+26: 0xaba37e _start [node]
+
+```
